@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -213,10 +214,16 @@ class MainActivity : AppCompatActivity() {
         val image = FirebaseVisionImage.fromBitmap(bitmap)
         detector.detectInImage(image)
             .addOnSuccessListener {
+                button.visibility  = View.VISIBLE
+
                 for (firebaseBarcode in it) {
+
 
                     println("Firebase ${firebaseBarcode.valueType}")
                     textView.text = firebaseBarcode.displayValue //Display contents inside the barcode
+                    button.setOnClickListener {
+                        startActivity(BarCodeGeneratorActivity.getIntent(this@MainActivity, firebaseBarcode.displayValue!!))
+                    }
 
                     println("Raw value: ${firebaseBarcode.rawValue}")
 
